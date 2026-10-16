@@ -318,7 +318,7 @@ fun ScreenBanks(goNext: () -> Unit, goBack: () -> Unit, viewModel: StateViewMode
                 color = MyMilkText,
                 modifier = Modifier.padding(20.dp),
                 fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(id = R.drawable.img),
+            Image(painter = painterResource(id = R.drawable.logo_upd),
                 contentDescription = "logo",
                 modifier = Modifier.size(150.dp))
 

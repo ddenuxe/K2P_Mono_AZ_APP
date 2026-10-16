@@ -126,7 +126,7 @@ fun ScreenJournal(goBack: () -> Unit, monobankService: MonobankService) {
             }
 
             Image(
-                painter = painterResource(id = R.drawable.img),
+                painter = painterResource(id = R.drawable.logo_upd),
                 contentDescription = "logo",
                 modifier = Modifier.size(45.dp)
             )

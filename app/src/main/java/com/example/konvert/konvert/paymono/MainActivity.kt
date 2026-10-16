@@ -40,6 +40,7 @@ import com.example.konvert.konvert.paymono.screens.ServerScreen
 import com.example.konvert.konvert.paymono.screens.StateViewModel
 import com.example.konvert.konvert.paymono.screens.screen_banks.ScreenBanks
 import com.example.konvert.konvert.paymono.screens.screen_cards.ScreenCards
+import com.example.konvert.konvert.paymono.screens.screen_device_id.ScreenDeviceId
 import com.example.konvert.konvert.paymono.screens.screen_token.ScreenToken
 import com.example.konvert.konvert.paymono.screens.screen_user_id.ScreenUserId
 import com.example.konvert.konvert.paymono.ui.theme.Konvert2payMonoTheme
@@ -170,18 +171,18 @@ class MainActivity : ComponentActivity() {
         }
 
 
-        if (device_id == "") {
-            Thread {
-                val temp = try {
-                    val info = AdvertisingIdClient.getAdvertisingIdInfo(this)
-                    info.id.toString()
-                } catch (e: Exception) {
-                    ""
-                }
-                myViewModel.setDeviceId(temp)
-
-            }.start()
-        }
+//        if (device_id == "") {
+//            Thread {
+//                val temp = try {
+//                    val info = AdvertisingIdClient.getAdvertisingIdInfo(this)
+//                    info.id.toString()
+//                } catch (e: Exception) {
+//                    ""
+//                }
+//                myViewModel.setDeviceId(temp)
+//
+//            }.start()
+//        }
 
 
 
@@ -279,7 +280,10 @@ class MainActivity : ComponentActivity() {
                             ScreenToken ( { navController.navigate("user") }, viewModel = myViewModel)
                         }
                         composable(route = "user") {
-                            ScreenUserId ( goNext =  { navController.navigate("cards") }, goBack = { navController.popBackStack()}, viewModel = myViewModel)
+                            ScreenUserId ( goNext =  { navController.navigate("device") }, goBack = { navController.popBackStack()}, viewModel = myViewModel)
+                        }
+                        composable(route = "device") {
+                            ScreenDeviceId ( goNext =  { navController.navigate("cards") }, goBack = { navController.popBackStack()}, viewModel = myViewModel)
                         }
                         composable(route = "cards") {
                             ScreenCards ( goNext =  { navController.navigate("banks") }, goBack = { navController.popBackStack()}, viewModel = myViewModel)

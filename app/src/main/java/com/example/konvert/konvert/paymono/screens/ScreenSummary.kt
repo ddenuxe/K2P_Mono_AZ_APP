@@ -28,8 +28,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +36,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,6 +60,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.konvert.konvert.paymono.MonobankService
 import com.example.konvert.konvert.paymono.R
 import com.example.konvert.konvert.paymono.UtilsObject
+import com.example.konvert.konvert.paymono.data.Card
+import com.example.konvert.konvert.paymono.database.LogStorage
+import com.example.konvert.konvert.paymono.getCurrentDate
 import com.example.konvert.konvert.paymono.noRippleClickable
 import com.example.konvert.konvert.paymono.screens.custom_components.GradientButton
 import com.example.konvert.konvert.paymono.screens.custom_components.TextFieldValidationCard
@@ -76,7 +76,7 @@ import com.example.konvert.konvert.paymono.ui.theme.MyMilkText
 import com.example.konvert.konvert.paymono.ui.theme.fontLight
 import com.example.konvert.konvert.paymono.ui.theme.gradient1
 import com.example.konvert.konvert.paymono.ui.theme.gradient2
-import com.example.konvert.konvert.paymono.ui.theme.gradientGreyCard
+import com.example.konvert.konvert.paymono.ui.theme.gradientFopCard
 import com.example.konvert.konvert.paymono.ui.theme.newBlue
 import com.example.konvert.konvert.paymono.ui.theme.textGrey
 import kotlinx.coroutines.launch
@@ -85,10 +85,6 @@ import my.nanihadesuka.compose.ScrollbarLayoutSide
 import my.nanihadesuka.compose.ScrollbarSelectionActionable
 import my.nanihadesuka.compose.ScrollbarSelectionMode
 import my.nanihadesuka.compose.ScrollbarSettings
-import com.example.konvert.konvert.paymono.data.Card
-import com.example.konvert.konvert.paymono.database.LogStorage
-import com.example.konvert.konvert.paymono.getCurrentDate
-import com.example.konvert.konvert.paymono.ui.theme.gradientFopCard
 
 
 @Composable
@@ -185,7 +181,12 @@ fun ScreenSummary(
                     TextFieldValidationCard(value = viewModel.jarCardLink_1, onChange = viewModel::setJarCardLinkValue_1, placeholder = "", modifier = Modifier, onClear = { viewModel.setJarCardLinkValue_1("") })
                 } } },
             confirmButton = {
-                Button(colors = ButtonColors(containerColor = MyMilkText, contentColor = MyBackground, disabledContentColor = Color.DarkGray, disabledContainerColor = newBlue),
+                Button(colors = ButtonColors(
+                    containerColor = MyMilkText,
+                    contentColor = MyBackground,
+                    disabledContentColor = Color.DarkGray,
+                    disabledContainerColor = newBlue
+                ),
                     onClick = {
                         //viewModel.setJarCardNumerValue_1(cardValue_1.value)
                         //viewModel.setJarCardLinkValue_1(linkValue_1.value)
@@ -427,7 +428,7 @@ fun ScreenSummary(
             }
             Text(text = header?.substringBefore("&") ?: "Подтверждение данных", color = MyMilkText, fontFamily = fontLight, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             Image(
-                painter = painterResource(id = R.drawable.img),
+                painter = painterResource(id = R.drawable.logo_upd),
                 contentDescription = "logo",
                 modifier = Modifier.size(45.dp)
             )
@@ -481,7 +482,7 @@ fun ScreenSummary(
                 Column(modifier = Modifier.padding(30.dp, 10.dp)) {
 
                     Text(
-                        text = "Test Request URL",
+                        text = "User ID",
                         color = MyMilkText,
                         fontFamily = fontLight,
                         fontSize = 16.sp,
@@ -489,8 +490,8 @@ fun ScreenSummary(
                     )
 
                     Column(modifier = Modifier.shadow(1.dp, RoundedCornerShape(10.dp), true)) {
-                        OutlinedTextField(value = viewModel.serverValue,
-                            onValueChange = { if (!it.contains("\n")) viewModel.setAddress(it) },
+                        OutlinedTextField(value = viewModel.userValue,
+                            onValueChange = { if (!it.contains("\n")) viewModel.setUserId(it) },
                             singleLine = true,
                             textStyle = TextStyle(color = MyMilkText),
                             modifier = Modifier
@@ -509,14 +510,13 @@ fun ScreenSummary(
                                     tint = MyMilkText,
                                     contentDescription = "Back button",
                                     modifier = Modifier.clickable {
-                                        viewModel.setAddress("")
+                                        viewModel.setUserId("")
                                     }
                                 )
                             })
                     }
 
                 }
-
 
                 Column(modifier = Modifier.padding(30.dp, 10.dp)) {
 
@@ -560,7 +560,7 @@ fun ScreenSummary(
                 Column(modifier = Modifier.padding(30.dp, 10.dp)) {
 
                     Text(
-                        text = "User ID",
+                        text = "Test External URL",
                         color = MyMilkText,
                         fontFamily = fontLight,
                         fontSize = 16.sp,
@@ -568,8 +568,8 @@ fun ScreenSummary(
                     )
 
                     Column(modifier = Modifier.shadow(1.dp, RoundedCornerShape(10.dp), true)) {
-                        OutlinedTextField(value = viewModel.userValue,
-                            onValueChange = { if (!it.contains("\n")) viewModel.setUserId(it) },
+                        OutlinedTextField(value = viewModel.serverValue,
+                            onValueChange = { if (!it.contains("\n")) viewModel.setAddress(it) },
                             singleLine = true,
                             textStyle = TextStyle(color = MyMilkText),
                             modifier = Modifier
@@ -579,8 +579,10 @@ fun ScreenSummary(
                                 cursorColor = MyMilkText,
                                 focusedBorderColor = MyMilkText,
                                 disabledContainerColor = MyMilkText,
-                                unfocusedBorderColor = MyMilkText
+                                unfocusedBorderColor = MyMilkText,
+                                unfocusedPlaceholderColor = MyMilkText.copy(alpha = 0.5f)
                             ),
+                            placeholder = { Text("Используйте для тестирования запросов") },
                             shape = RoundedCornerShape(10.dp),
                             trailingIcon = {
                                 Icon(
@@ -588,13 +590,16 @@ fun ScreenSummary(
                                     tint = MyMilkText,
                                     contentDescription = "Back button",
                                     modifier = Modifier.clickable {
-                                        viewModel.setUserId("")
+                                        viewModel.setAddress("")
                                     }
                                 )
                             })
                     }
 
                 }
+
+
+
 
                 Column(modifier = Modifier.padding(30.dp, 10.dp)) {
 
@@ -828,7 +833,7 @@ fun ScreenSummary(
                                         viewModel.setFOPCardsIBAN("")
                                         viewModel.fop_card_temp = ""
                                         viewModel.fop_card_IBAN_temp = ""
-                                    }, modifier = Modifier.size(25.dp)) {
+                                    }, modifier = Modifier.size(25.dp),) {
                                         Icon(
                                             imageVector = Icons.Default.Clear,
                                             contentDescription = "back button",
@@ -1079,7 +1084,13 @@ fun ScreenSummary(
 
                     if (viewModel.whiteCardValueIBAN != "" || viewModel.whiteCardValue != "") UtilsObject.all_cards.add(Card("white", viewModel.whiteCardValue, viewModel.whiteCardValueIBAN, viewModel.whiteCardValueLink))
                     if (viewModel.blackCardValueIBAN != "" || viewModel.blackCardValue != "") UtilsObject.all_cards.add(Card("black", viewModel.blackCardValue, viewModel.blackCardValueIBAN, viewModel.blackCardValueLink))
-                    if (viewModel.fopCardValueIBAN != "" || viewModel.FOPCardValue != "") UtilsObject.all_cards.add(Card(UtilsObject.fop_carta, viewModel.FOPCardValue, viewModel.fopCardValueIBAN))
+                    if (viewModel.fopCardValueIBAN != "" || viewModel.FOPCardValue != "") UtilsObject.all_cards.add(
+                        Card(
+                            UtilsObject.fop_carta,
+                            viewModel.FOPCardValue,
+                            viewModel.fopCardValueIBAN
+                        )
+                    )
 
 //                    if (viewModel.whiteCardValueIBAN != "") UtilsObject.all_cards.put( "white",viewModel.whiteCardValueIBAN.filterNot { it.isWhitespace() })
 //                    if (viewModel.blackCardValueIBAN != "") UtilsObject.all_cards.put("black",viewModel.blackCardValueIBAN.filterNot { it.isWhitespace() })
@@ -1176,6 +1187,8 @@ fun ScreenSummary(
         }
     }
 }
+
+
 
 
 @Preview

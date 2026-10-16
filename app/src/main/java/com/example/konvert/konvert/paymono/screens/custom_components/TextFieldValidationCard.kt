@@ -1,6 +1,7 @@
 package com.example.konvert.konvert.paymono.screens.custom_components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -47,7 +48,7 @@ fun TextFieldValidationCard(
 //
 //    }
 
-    Column(horizontalAlignment = Alignment.Start, modifier = modifier.fillMaxWidth()) {
+    Column(horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center, modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
             value = value,
             onValueChange = {

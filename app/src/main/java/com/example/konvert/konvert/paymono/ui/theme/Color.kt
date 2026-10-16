@@ -20,6 +20,10 @@ val MyWhiteText = Color(0xFFC2C2BB)
 val MyRed = Color(0xFFFF7777)
 val LogsColor = Color(0xFF81E296)
 
+val OldColor = Color(0xFFefefe6)
+
+//val OldColor = Color(0xFFC7C7B3)
+
 val textGrey = Color(0xFFB8B8B0)
 val gradient1 =
     Brush.verticalGradient(listOf(Color(0xFF4E4E4D), Color(0xFF323232)))

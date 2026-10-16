@@ -75,7 +75,7 @@ fun ScreenDeviceId(goNext: () -> Unit, goBack: () -> Unit, viewModel: StateViewM
                 color = MyMilkText,
                 modifier = Modifier.padding(50.dp),
                 fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(id = R.drawable.img),
+            Image(painter = painterResource(id = R.drawable.logo_upd),
                 contentDescription = "logo",
                 modifier = Modifier.size(150.dp))
 

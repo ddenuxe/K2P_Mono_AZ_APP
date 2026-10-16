@@ -13,6 +13,7 @@ import com.example.konvert.konvert.paymono.data.Card
 import com.example.konvert.konvert.paymono.data.ClientInfo
 import com.example.konvert.konvert.paymono.data.JarAccount
 import com.example.konvert.konvert.paymono.data.MyTransaction
+import com.example.konvert.konvert.paymono.data.UpTrans
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -87,35 +88,77 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
     }
 }
 
+fun isIbanTransaction(upTrans: UpTrans): Boolean {
+    val desc = upTrans.description ?: return false
+
+    return desc.startsWith("Від:") ||
+            desc.startsWith("Вiд:") ||
+            (desc != "Переказ на картку" && !desc.contains("картк"))
+}
+
+// Допоміжна перевірка: чи є транзакція IBAN-переказом
+fun isIbanTransaction(myTransaction: MyTransaction): Boolean {
+    val desc = myTransaction.description ?: return false
+
+    return desc.startsWith("Від:") ||
+            desc.startsWith("Вiд:") ||
+            (desc != "Переказ на картку" && !desc.contains("картк"))
+}
+
 fun getIban(myTransaction: MyTransaction, jarAccount: JarAccount?): String {
-    if (myTransaction.counterIban != null && myTransaction.counterIban != "") {
-        return jarAccount?.iban ?: ""
-    } else if (myTransaction.description?.startsWith("Вiд:") == true) {
-        return jarAccount?.iban ?: ""
+    return if (isIbanTransaction(myTransaction)) {
+        jarAccount?.iban ?: ""
     } else {
-        return ""
+        ""
     }
 }
 
 fun getCardNumber(myTransaction: MyTransaction, jarAccount: JarAccount?): String {
-    if (myTransaction.counterIban != null && myTransaction.counterIban != "") {
-        return ""
-    } else if (myTransaction.description?.startsWith("Вiд:") == true) {
-        return ""
+    return if (isIbanTransaction(myTransaction)) {
+        ""
     } else {
-        return jarAccount?.card ?: ""
+        jarAccount?.card ?: ""
     }
 }
 
 fun getCardLink(myTransaction: MyTransaction, jarAccount: JarAccount?): String {
-    if (myTransaction.counterIban != null && myTransaction.counterIban != "") {
-        return ""
-    } else if (myTransaction.description?.startsWith("Вiд:") == true) {
-        return ""
+    return if (isIbanTransaction(myTransaction)) {
+        ""
     } else {
-        return "https://send.monobank.ua/${jarAccount?.sendId}"
+        // Перевіряємо, чи є sendId, щоб не генерувати пустий лінк
+        val sendId = jarAccount?.sendId
+        if (!sendId.isNullOrEmpty()) "https://send.monobank.ua/$sendId" else ""
     }
 }
+//fun getIban(myTransaction: MyTransaction, jarAccount: JarAccount?): String {
+//    if (myTransaction.counterIban != null && myTransaction.counterIban != "") {
+//        return jarAccount?.iban ?: ""
+//    } else if (myTransaction.description?.startsWith("Вiд:") == true) {
+//        return jarAccount?.iban ?: ""
+//    } else {
+//        return ""
+//    }
+//}
+//
+//fun getCardNumber(myTransaction: MyTransaction, jarAccount: JarAccount?): String {
+//    if (myTransaction.counterIban != null && myTransaction.counterIban != "") {
+//        return ""
+//    } else if (myTransaction.description?.startsWith("Вiд:") == true) {
+//        return ""
+//    } else {
+//        return jarAccount?.card ?: ""
+//    }
+//}
+//
+//fun getCardLink(myTransaction: MyTransaction, jarAccount: JarAccount?): String {
+//    if (myTransaction.counterIban != null && myTransaction.counterIban != "") {
+//        return ""
+//    } else if (myTransaction.description?.startsWith("Вiд:") == true) {
+//        return ""
+//    } else {
+//        return "https://send.monobank.ua/${jarAccount?.sendId}"
+//    }
+//}
 
 fun getCurrentDate(): String {
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.example.konvert.konvert.paymono.data.UpTrans
 import com.example.konvert.konvert.paymono.getCorrectDay
 import com.example.konvert.konvert.paymono.getCorrectTime
+import com.example.konvert.konvert.paymono.isIbanTransaction
 import com.example.konvert.konvert.paymono.ui.theme.MyMilkText
 import com.example.konvert.konvert.paymono.ui.theme.fontLight
 import com.example.konvert.konvert.paymono.ui.theme.gradient1
@@ -215,7 +216,7 @@ fun WhiteCardTransaction(transaction: UpTrans, search: String) {
                                 }
                                 append(resultTextCardName_2)
                             }
-                            if (transaction.description?.startsWith("Вiд: ") == true) {
+                            if (isIbanTransaction(transaction)) {
                                 withStyle(style = SpanStyle(color = MyMilkText)) {
 
                                     append(" (" + resultTextIban_1)

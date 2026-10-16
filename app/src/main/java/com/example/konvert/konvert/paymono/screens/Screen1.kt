@@ -55,6 +55,7 @@ import com.example.konvert.konvert.paymono.ui.theme.MyBackground
 import com.example.konvert.konvert.paymono.ui.theme.MyDarkGrey
 import com.example.konvert.konvert.paymono.ui.theme.MyLightGrey
 import com.example.konvert.konvert.paymono.ui.theme.MyMilkText
+import com.example.konvert.konvert.paymono.ui.theme.OldColor
 import com.example.konvert.konvert.paymono.ui.theme.fontLight
 
 @Composable
@@ -74,9 +75,11 @@ fun Screen1(goNext: () -> Unit) {
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween) {
 
-            Image(painter = painterResource(id = R.drawable.img),
+            Image(painter = painterResource(id = R.drawable.logo_upd),
                 contentDescription = "logo",
-                modifier = Modifier.size(150.dp))
+                modifier = Modifier.size(150.dp)
+            )
+
             Text(text = "Это приложение поможет настроить\n" +
                     "автоматизацию для Платформы\n" +
                     "Konvert2pay для Monobank",

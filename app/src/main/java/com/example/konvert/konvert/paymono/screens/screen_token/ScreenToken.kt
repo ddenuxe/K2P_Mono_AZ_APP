@@ -70,7 +70,7 @@ fun ScreenToken(goNext: () -> Unit, viewModel: StateViewModel = viewModel()) {
                 color = MyMilkText,
                 modifier = Modifier.padding(50.dp, 50.dp, 50.dp, 0.dp),
                 fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(id = R.drawable.img),
+            Image(painter = painterResource(id = R.drawable.logo_upd),
                 contentDescription = "logo",
                 modifier = Modifier.size(150.dp))
 
@@ -100,7 +100,7 @@ fun ScreenToken(goNext: () -> Unit, viewModel: StateViewModel = viewModel()) {
                 errorMessage = viewModel.tokenError,
                 isError = viewModel.tokenError.isNotEmpty(),
                 modifier = Modifier.padding(30.dp, 0.dp).height(50.dp),
-                onClear = { viewModel.setTokenName("") }
+                onClear = { viewModel.setTokenName("") },
             )
 
 

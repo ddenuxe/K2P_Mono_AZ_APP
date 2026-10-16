@@ -155,7 +155,7 @@ fun ScreenCards(goNext: () -> Unit, goBack: () -> Unit, viewModel: StateViewMode
                 color = MyMilkText,
                 modifier = Modifier.padding(0.dp),
                 fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(id = R.drawable.img),
+            Image(painter = painterResource(id = R.drawable.logo_upd),
                 contentDescription = "logo",
                 modifier = Modifier.size(150.dp))
 

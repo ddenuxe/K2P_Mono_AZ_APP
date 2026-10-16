@@ -66,12 +66,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.konvert.konvert.paymono.BuildConfig
 import com.example.konvert.konvert.paymono.MonobankService
 import com.example.konvert.konvert.paymono.R
 import com.example.konvert.konvert.paymono.data.UpTrans
+import com.example.konvert.konvert.paymono.database.LogStorage
 import com.example.konvert.konvert.paymono.getCorrectDay
 import com.example.konvert.konvert.paymono.getCorrectTime
 import com.example.konvert.konvert.paymono.screens.custom_components.BlackCardTransaction
+import com.example.konvert.konvert.paymono.screens.custom_components.LogsDialog
 import com.example.konvert.konvert.paymono.screens.custom_components.SimpleTransaction
 import com.example.konvert.konvert.paymono.screens.custom_components.TextFieldValidationCard
 import com.example.konvert.konvert.paymono.screens.custom_components.WhiteCardTransaction
@@ -101,6 +104,15 @@ fun ScreenSettings(deleteAll: () -> Unit,  goBack: () -> Unit, viewModel: StateV
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
+    val context = LocalContext.current
+    val listOfLogs = remember {
+        mutableStateOf<List<String>>(emptyList())
+    }
+    val logsDialogState = remember { mutableStateOf(false) }
+
+    if (logsDialogState.value) {
+        LogsDialog(logs = listOfLogs, dialogState = logsDialogState)
+    }
 
     if (buttonState.value) {
         AlertDialog(modifier = Modifier, containerColor = MyBackground, onDismissRequest = {
@@ -220,8 +232,29 @@ fun ScreenSettings(deleteAll: () -> Unit,  goBack: () -> Unit, viewModel: StateV
                 )
             }
 
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "О приложении",
+                    textAlign = TextAlign.Center,
+                    color = MyMilkText,
+                    modifier = Modifier,
+                    fontFamily = fontLight,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Версия: ${BuildConfig.VERSION_NAME}",
+                    textAlign = TextAlign.Center,
+                    color = MyMilkText.copy(alpha = 0.5f),
+                    modifier = Modifier,
+                    fontFamily = fontLight,
+                    fontSize = 12.sp
+                )
+            }
+
+
             Image(
-                painter = painterResource(id = R.drawable.img),
+                painter = painterResource(id = R.drawable.logo_upd),
                 contentDescription = "logo",
                 modifier = Modifier.size(45.dp)
             )
@@ -250,27 +283,57 @@ fun ScreenSettings(deleteAll: () -> Unit,  goBack: () -> Unit, viewModel: StateV
             )
         }
 
-        OutlinedButton(onClick = {
+
+        Column() {
+
+//            OutlinedButton(onClick = {
+//
+//
+//                if (logsDialogState.value == false) {
+//
+//                    val logs = LogStorage.getLogs(context)
+//                    listOfLogs.value = logs
+//                    logsDialogState.value = true
+//                }
+//
+//            }, border = BorderStroke(1.dp, MyMilkText), shape = RoundedCornerShape(10.dp), modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp)) {
+//
+//                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+//                    Text(
+//                        text = "Экспорт",
+//                        fontSize = 16.sp,
+//                        modifier = Modifier
+//                            .padding(horizontal = 0.dp).fillMaxWidth(),
+//                        textAlign = TextAlign.Center,
+//                        color = MyMilkText,
+//                        maxLines = 1
+//                    )
+//
+//                }
+//            }
+
+            OutlinedButton(onClick = {
 
 
-            buttonState.value = true
+                buttonState.value = true
 
-            //Toast.makeText(localContext, "Success!", Toast.LENGTH_LONG).show()
+                //Toast.makeText(localContext, "Success!", Toast.LENGTH_LONG).show()
 
 
-        }, border = BorderStroke(1.dp, MyMilkText), shape = RoundedCornerShape(10.dp), modifier = Modifier.fillMaxWidth().padding(10.dp, 30.dp)) {
+            }, border = BorderStroke(1.dp, MyMilkText), shape = RoundedCornerShape(10.dp), modifier = Modifier.fillMaxWidth().padding(10.dp, 10.dp)) {
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Сбросить настройки",
-                    fontSize = 16.sp,
-                    modifier = Modifier
-                        .padding(horizontal = 0.dp).fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    color = MyMilkText,
-                    maxLines = 1
-                )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Сбросить настройки",
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(horizontal = 0.dp).fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        color = MyMilkText,
+                        maxLines = 1
+                    )
 
+                }
             }
         }
 
